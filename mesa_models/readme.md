@@ -1,4 +1,4 @@
-#Mesa models    
+# Mesa models    
 
 Agent based models for simple agent scheduling and interaction. 
 Artificial Intelligence.
