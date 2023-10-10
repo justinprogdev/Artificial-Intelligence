@@ -159,104 +159,52 @@ class TicTacToeUI:
         self.training_cycles = int(self.training_entry.get())
         if self.training_cycles > 1000000:
             self.training_cycles = 1000000  # Cap at 100,000
-        epsilon = 1000 # initial exploration rate
-        epsilon_min = 0.1  # minimum exploration rate
-        epsilon_decay = 0.995  # decay factor
 
         for i in range(1, self.training_cycles):
-            state = board_to_state(self.game.board) 
+            state = board_to_state(self.game.board)
             self.message_label.config(text=f"Training Game: {i}")
             self.window.update_idletasks()
             done = False
             while not done:
-                empty_cells = [i for i, cell in enumerate(self.game.board) if cell == " "] 
-                if np.random.rand() < epsilon:
+                empty_cells = [
+                    i for i, cell in enumerate(self.game.board) if cell == " "
+                ]
+                if np.random.rand() < 0.6:
                     action = np.random.choice(empty_cells)
                 else:
                     action = np.argmax(q_table[state])
 
                 result = self.game.make_move(action)
-                reward = 0  
+                reward = 0
                 if result == 1 or result == 0.5:
-                    reward = result
+                    reward = 1
                     done = True
+                else:
+                    reward = 0.25
 
-                next_state = board_to_state(self.game.board) 
+                next_state = board_to_state(self.game.board)
                 old_value = q_table[state, action]
                 next_max = np.max(q_table[next_state])
 
                 if not done:
-                    empty_cells = [i for i, cell in enumerate(self.game.board) if cell == " "]  
+                    empty_cells = [
+                        i for i, cell in enumerate(self.game.board) if cell == " "
+                    ]
                     if empty_cells:
-                        opponent_action = np.random.choice(empty_cells)
-                        opponent_result = self.game.make_move(opponent_action)  
+                        opponent_action = np.argmax(q_table[state])
+                        opponent_result = self.game.make_move(opponent_action)
                         if opponent_result == 1:
-                            reward = -1.0
+                            reward = -0.1
                             done = True
 
-                # Update state-action value 
-                new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
+                # Update state-action value
+                new_value = (1 - alpha) * old_value + alpha * (
+                    reward + gamma * next_max
+                )
                 q_table[state, action] = new_value
                 state = next_state
 
-            self.game.reset_board()  # Use self.game instead of game
-
-            # Decay epsilon (Added)
-            if epsilon > epsilon_min:
-                epsilon *= epsilon_decay
-
-    # def train_bot(self):
-    #     self.training_cycles = int(self.training_entry.get())
-    #     if self.training_cycles > 1000000:
-    #         self.training_cycles = 1000000  # Cap at 100,000
-    #     # Train the bot
-    #     epsilon = 0.9  # initial exploration rate
-    #     epsilon_min = 0.1  # minimum exploration rate
-    #     epsilon_decay = 0.995  # decay factor
-
-    #     for i in range(1, self.training_cycles):
-    #         state = board_to_state(self.game.board)
-    #         self.message_label.config(text=f"Training Game: {i}")
-    #         self.window.update_idletasks()
-    #         done = False
-    #         while not done:
-    #             empty_cells = [i for i, cell in enumerate(game.board) if cell == " "]
-    #             print("Training Game:", i + 1)
-    #             if np.random.rand() < epsilon:
-    #                 action = np.random.choice(empty_cells)
-    #             else:
-    #                 action = np.argmax(q_table[state])
-    #             result = self.game.make_move(action)
-
-    #             # Reward High for a win or a draw
-    #             if result == 1 or result == 0.5:
-    #                 reward = result
-    #                 done = True
-
-    #             if not done:
-    #                 empty_cells = [i for i, cell in enumerate(self.game.board) if cell == " "]
-    #                 if empty_cells:
-    #                     opponent_action = np.random.choice(empty_cells)
-    #                     opponent_result = game.make_move(opponent_action)
-    #                     # Reward High for a win or a draw
-    #                     if opponent_result == 1:
-    #                         reward = -1.0
-    #                         done = True
-                        
-    #             # Update state-action value
-    #             next_state = board_to_state(self.game.board)
-    #             old_value = q_table[state, action]
-    #             next_max = np.max(q_table[next_state])
-    #             new_value = (1 - alpha) * old_value + alpha * (
-    #                 reward + gamma * next_max
-    #             )
-    #             q_table[state, action] = new_value
-    #             state = next_state
-    #         self.game.reset_board()
-
-    #         # Decay epsilon
-    #         if epsilon > epsilon_min:
-    #             epsilon *= epsilon_decay
+            self.game.reset_board()
 
 
 # Initialize Q-table and hyperparameters
