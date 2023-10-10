@@ -3,6 +3,20 @@
 import tkinter as tk
 import numpy as np
 
+class TicTacToeagent:
+    def __init__(self, q_table):
+        self.q_table = q_table
+
+    def make_move(self, board):
+        state = board_to_state(board)
+        empty_cells = [i for i, cell in enumerate(board) if cell == " "]
+        if empty_cells:
+            q_values = [
+                self.q_table[state, i] if i in empty_cells else -np.inf for i in range(9)
+            ]
+            agent_action = np.argmax(q_values)
+            return agent_action
+        return None
 
 class TicTacToeGame:
     def __init__(self):
@@ -51,12 +65,13 @@ class TicTacToeGame:
 
 
 class TicTacToeUI:
-    def __init__(self, game):
+    def __init__(self, game, agent):
         """Initialize the UI with a game instance."""
         self.game = game
         self.window = tk.Tk()
         self.window.title("Tic Tac Toe")
         self.buttons = []
+        self.agent = agent
         self.training_cycles = 100
 
         # Add a label and text box for entering training cycles
@@ -66,7 +81,7 @@ class TicTacToeUI:
         self.training_entry.grid(row=1, column=3)
 
         # Add a button to start training on user input
-        self.train_button = tk.Button(self.window, text="Train", command=self.train_bot)
+        self.train_button = tk.Button(self.window, text="Train", command=self.train_agent)
         self.train_button.grid(row=2, column=3)
 
         # Add some commentary for the user to know it's working
@@ -114,10 +129,10 @@ class TicTacToeUI:
             else:
                 self.message_label.config(text="")
 
-            bot_index = self.bot_move()
-            if bot_index is not None:
-                result = self.game.make_move(bot_index)
-                row, column = divmod(bot_index, 3)
+            agent_index = self.agent.make_move(self.game.board)
+            if agent_index is not None:
+                result = self.game.make_move(agent_index)
+                row, column = divmod(agent_index, 3)
                 self.buttons[row][column].config(text=self.game.current_player)
                 self.game.current_player = (
                     "O" if self.game.current_player == "X" else "X"
@@ -136,26 +151,13 @@ class TicTacToeUI:
             else:
                 self.message_label.config(text="")
 
-    # use trained bot to make a move
-    def bot_move(self):
-        state = board_to_state(self.game.board)
-        empty_cells = [i for i, cell in enumerate(self.game.board) if cell == " "]
-
-        if empty_cells:
-            q_values = [
-                q_table[state, i] if i in empty_cells else -np.inf for i in range(9)
-            ]
-            bot_action = np.argmax(q_values)
-            return bot_action
-        return None
-
     def reset_buttons(self):
         """Reset the button texts for a new game."""
         for i in range(3):
             for j in range(3):
                 self.buttons[i][j].config(text=" ")
 
-    def train_bot(self):
+    def train_agent(self):
         self.training_cycles = int(self.training_entry.get())
         if self.training_cycles > 1000000:
             self.training_cycles = 1000000  # Cap at 1,000,000
@@ -220,4 +222,5 @@ def board_to_state(board):
 
 if __name__ == "__main__":
     game = TicTacToeGame()
-    TicTacToeUI(game)
+    agent = TicTacToeagent(q_table)
+    TicTacToeUI(game, agent)
