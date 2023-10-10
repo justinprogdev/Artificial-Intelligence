@@ -4,3 +4,6 @@ fuzzy-logic/.vscode/settings.json
 /.ipynb_checkpoints
 .ipynb_checkpoints
 # ignore _pycache_ directories
+q_learning/tic_tac_toe/__pycache__/tic_tac_toe_board.cpython-311.pyc
+q_learning/tic_tac_toe/__pycache__/tic_tac_toe_gui.cpython-311.pyc
+q_learning/tic_tac_toe/__pycache__/tic_tac_toe_q_learning.cpython-311.pyc
