@@ -169,7 +169,7 @@ class TicTacToeUI:
                 empty_cells = [
                     i for i, cell in enumerate(self.game.board) if cell == " "
                 ]
-                if np.random.rand() < 0.6:
+                if np.random.rand() < 0.8:
                     action = np.random.choice(empty_cells)
                 else:
                     action = np.argmax(q_table[state])
