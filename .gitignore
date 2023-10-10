@@ -3,3 +3,5 @@ fuzzy-logic/.ipynb_checkpoints/Untitled-checkpoint.ipynb
 fuzzy-logic/.vscode/settings.json
 /.ipynb_checkpoints
 .ipynb_checkpoints
+# ignore _pycache_ directories
+__pycache__
