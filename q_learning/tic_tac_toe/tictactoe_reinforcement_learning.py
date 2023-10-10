@@ -3,20 +3,38 @@
 import tkinter as tk
 import numpy as np
 
-class TicTacToeagent:
-    def __init__(self, q_table):
-        self.q_table = q_table
+
+class TicTacToeAgent:
+    def __init__(self):
+        # Set the state with a Q table representing all possible states 19,683 (I know, this is easiest)
+        self.q_table = np.zeros([3**9, 9])
+
+        # Set the learning rate
+        self.alpha = 0.1
+
+        # Set the discount factor
+        self.gamma = 0.6
 
     def make_move(self, board):
+        # Convert the board to state by mapping Empty string to "0", "X" to "1" and "O": "2"
         state = board_to_state(board)
+
+        # Get all empty cells for possible moves
         empty_cells = [i for i, cell in enumerate(board) if cell == " "]
+
         if empty_cells:
+            # List of Q values
             q_values = [
-                self.q_table[state, i] if i in empty_cells else -np.inf for i in range(9)
+                # for each empty cell i, get Q State, Action for it
+                self.q_table[state, i] if i in empty_cells else -np.inf
+                for i in range(9)
             ]
+
+            # Return the action with the highest Q value
             agent_action = np.argmax(q_values)
             return agent_action
         return None
+
 
 class TicTacToeGame:
     def __init__(self):
@@ -81,7 +99,7 @@ class TicTacToeUI:
         self.training_entry.grid(row=1, column=3)
 
         # Add a button to start training on user input
-        self.train_button = tk.Button(self.window, text="Train", command=self.train_agent)
+        self.train_button = tk.Button(self.window, text="Train", command=lambda: self.train_agent(self.agent))
         self.train_button.grid(row=2, column=3)
 
         # Add some commentary for the user to know it's working
@@ -114,12 +132,12 @@ class TicTacToeUI:
         index = 3 * row + column
 
         # If Cell is empty, process move
-        if self.game.board[index] == " ":  
+        if self.game.board[index] == " ":
             result = self.game.make_move(index)
             self.buttons[row][column].config(text=self.game.current_player)
 
-            #1. Process Move for Human
-              # Check if the game is won
+            # 1. Process Move for Human
+            # Check if the game is won
             if result == 1:
                 self.message_label.config(text="You win!")
                 self.game.reset_board()
@@ -127,7 +145,7 @@ class TicTacToeUI:
                 return  # Exit the method if the game is already won
 
             # Check if the game is draw
-            if result == 0.5:  
+            if result == 0.5:
                 self.message_label.config(text="Draw")
                 self.game.reset_board()
                 self.reset_buttons()
@@ -136,16 +154,22 @@ class TicTacToeUI:
 
             # switch to the next player
             self.game.current_player = "O" if self.game.current_player == "X" else "X"
-            
-            #2. Make Move for Altic
-            #The agent makes a move based on the board state
+
+            # 2. Make Move for Altic
+            # The agent makes a move based on the board state
             agent_index = self.agent.make_move(self.game.board)
 
             if agent_index is not None:
                 result = self.game.make_move(agent_index)
-                row, column = divmod(agent_index, 3) # Convert index to row, column w division and Modulo
-                self.buttons[row][column].config(text=self.game.current_player) #update button text w agent's letter
-                self.game.current_player = "O" if self.game.current_player == "X" else "X"
+                row, column = divmod(
+                    agent_index, 3
+                )  # Convert index to row, column w division and Modulo
+                self.buttons[row][column].config(
+                    text=self.game.current_player
+                )  # update button text w agent's letter
+                self.game.current_player = (
+                    "O" if self.game.current_player == "X" else "X"
+                )
 
             if result == 1:  # Check if the game is won
                 self.message_label.config(text="Altic Wins!")
@@ -166,61 +190,90 @@ class TicTacToeUI:
             for j in range(3):
                 self.buttons[i][j].config(text=" ")
 
-    def train_agent(self):
-        self.training_cycles = int(self.training_entry.get())
-        if self.training_cycles > 1000000:
-            self.training_cycles = 1000000  # Cap at 1,000,000
+    def train_agent(self, agent):
+        """Train the agent for the given number of cycles based on user input.
+        The agent will play against itself and learn from the results.
+        It uses the Q-Learning algorithm, and implements Gym to do so."""
 
+        # Training Cylcles from user input
+        self.training_cycles = int(self.training_entry.get())
+
+        # Cap at 1,000,000 cycles
+        if self.training_cycles > 1000000:
+            self.training_cycles = 1000000
+
+        # Train the agent N times
         for i in range(1, self.training_cycles):
+            # Convert the board to state
             state = board_to_state(self.game.board)
-            self.message_label.config(text=f"Training Game: {(self.training_cycles - i) - 1}")
+
+            # Provided a counter to the user, so they know it's still training
+            self.message_label.config(
+                text=f"Training Game: {(self.training_cycles - i) - 1}"
+            )
             self.window.update_idletasks()
+
             done = False
+
+            # Start a training game
             while not done:
-                empty_cells = [
-                    i for i, cell in enumerate(self.game.board) if cell == " "
-                ]
+                # Get all empty cells for possible moves
+                empty_cells = [i for i, cell in enumerate(self.game.board) if cell == " "]
+
+                # Run the alogorithm to choose between exploration and exploitation
+                # If random number is less than 0.8, then explore, else exploit
                 if np.random.rand() < 0.8:
                     action = np.random.choice(empty_cells)
                 else:
-                    action = np.argmax(q_table[state])
+                    # Get the highest Q value for the current state
+                    action = np.argmax(agent.q_table[state])
 
+                # Make a move based on the chosen action
                 result = self.game.make_move(action)
-                reward = 0
-                if result == 1 or result == 0.5:
-                    reward = 1
-                    done = True
-                else:
-                    reward = 0.25
 
+                # initialize reward
+                reward = 0
+
+                # If game is won or drawn the game is done
+                # and a proportion of the reward is given based on results
+                if result == 1:
+                    reward = .8
+                    done = True
+
+                elif result == 0.6:
+                    reward = 0.6
+
+                else:
+                    reward = 0.2
+
+                # Update Q values, and back propagate.
                 next_state = board_to_state(self.game.board)
-                old_value = q_table[state, action]
-                next_max = np.max(q_table[next_state])
+                old_value = agent.q_table[state, action]
+                next_max = np.max(agent.q_table[next_state])
 
                 if not done:
                     empty_cells = [
                         i for i, cell in enumerate(self.game.board) if cell == " "
                     ]
                     if empty_cells:
-                        opponent_action = np.argmax(q_table[state])
+                        opponent_action = np.argmax(agent.q_table[state])
                         opponent_result = self.game.make_move(opponent_action)
                         if opponent_result == 1:
                             reward = -0.1
                             done = True
 
                 # Update state-action value
-                new_value = (1 - alpha) * old_value + alpha * (
-                    reward + gamma * next_max
+                next_state = board_to_state(self.game.board)
+                old_value = agent.q_table[state, action]
+                next_max = np.max(agent.q_table[next_state])
+
+                new_value = (1 - agent.alpha) * old_value + agent.alpha * (
+                    reward + agent.gamma * next_max
                 )
-                q_table[state, action] = new_value
+                agent.q_table[state, action] = new_value
                 state = next_state
 
             self.game.reset_board()
-
-
-# Initialize Q-table and hyperparameters
-q_table = np.zeros([3**9, 9])
-alpha, gamma = 0.1, 0.6
 
 
 # Function to convert board to state
@@ -231,5 +284,5 @@ def board_to_state(board):
 
 if __name__ == "__main__":
     game = TicTacToeGame()
-    agent = TicTacToeagent(q_table)
+    agent = TicTacToeAgent()
     TicTacToeUI(game, agent)
