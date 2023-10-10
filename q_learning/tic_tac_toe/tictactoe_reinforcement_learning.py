@@ -158,7 +158,7 @@ class TicTacToeUI:
     def train_bot(self):
         self.training_cycles = int(self.training_entry.get())
         if self.training_cycles > 1000000:
-            self.training_cycles = 1000000  # Cap at 100,000
+            self.training_cycles = 1000000  # Cap at 1,000,000
 
         for i in range(1, self.training_cycles):
             state = board_to_state(self.game.board)
