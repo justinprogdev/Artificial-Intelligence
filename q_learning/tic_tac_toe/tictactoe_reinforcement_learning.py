@@ -102,6 +102,7 @@ class TicTacToeUI:
                     text=" ",
                     width=10,
                     height=3,
+                    # Add click event handler for each button
                     command=lambda i=i, j=j: self.click(i, j),
                 )
                 button.grid(row=i, column=j)
@@ -109,34 +110,42 @@ class TicTacToeUI:
             self.buttons.append(row_buttons)
 
     def click(self, row, column):
-        """Handle button click events on squares."""
+        """Handle button click events on squares from UI."""
         index = 3 * row + column
-        if self.game.board[index] == " ":  # Check if the cell is empty
+
+        # If Cell is empty, process move
+        if self.game.board[index] == " ":  
             result = self.game.make_move(index)
             self.buttons[row][column].config(text=self.game.current_player)
-            self.game.current_player = "O" if self.game.current_player == "X" else "X"
 
-            if result == 1:  # Check if the game is won
+            #1. Process Move for Human
+              # Check if the game is won
+            if result == 1:
                 self.message_label.config(text="You win!")
                 self.game.reset_board()
                 self.reset_buttons()
                 return  # Exit the method if the game is already won
 
-            if result == 0.5:  # Check if the game is drawn
+            # Check if the game is draw
+            if result == 0.5:  
                 self.message_label.config(text="Draw")
                 self.game.reset_board()
                 self.reset_buttons()
             else:
                 self.message_label.config(text="")
 
+            # switch to the next player
+            self.game.current_player = "O" if self.game.current_player == "X" else "X"
+            
+            #2. Make Move for Altic
+            #The agent makes a move based on the board state
             agent_index = self.agent.make_move(self.game.board)
+
             if agent_index is not None:
                 result = self.game.make_move(agent_index)
-                row, column = divmod(agent_index, 3)
-                self.buttons[row][column].config(text=self.game.current_player)
-                self.game.current_player = (
-                    "O" if self.game.current_player == "X" else "X"
-                )
+                row, column = divmod(agent_index, 3) # Convert index to row, column w division and Modulo
+                self.buttons[row][column].config(text=self.game.current_player) #update button text w agent's letter
+                self.game.current_player = "O" if self.game.current_player == "X" else "X"
 
             if result == 1:  # Check if the game is won
                 self.message_label.config(text="Altic Wins!")
@@ -164,7 +173,7 @@ class TicTacToeUI:
 
         for i in range(1, self.training_cycles):
             state = board_to_state(self.game.board)
-            self.message_label.config(text=f"Training Game: {i}")
+            self.message_label.config(text=f"Training Game: {(self.training_cycles - i) - 1}")
             self.window.update_idletasks()
             done = False
             while not done:
