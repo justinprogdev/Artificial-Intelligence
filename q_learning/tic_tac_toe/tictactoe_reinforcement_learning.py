@@ -237,19 +237,14 @@ class TicTacToeUI:
                 # If game is won or drawn the game is done
                 # and a proportion of the reward is given based on results
                 if result == 1:
-                    reward = .8
+                    reward = 1
                     done = True
 
-                elif result == 0.6:
-                    reward = 0.6
+                elif result == 0.5:
+                    reward = 1
 
                 else:
-                    reward = 0.2
-
-                # Update Q values, and back propagate.
-                next_state = board_to_state(self.game.board)
-                old_value = agent.q_table[state, action]
-                next_max = np.max(agent.q_table[next_state])
+                    reward = 0.1
 
                 if not done:
                     empty_cells = [
@@ -258,8 +253,8 @@ class TicTacToeUI:
                     if empty_cells:
                         opponent_action = np.argmax(agent.q_table[state])
                         opponent_result = self.game.make_move(opponent_action)
-                        if opponent_result == 1:
-                            reward = -0.1
+                        if opponent_result == 1 or opponent_result == 0.5:
+                            reward = -0.2 # Punish the agent for losing
                             done = True
 
                 # Update state-action value
