@@ -1,5 +1,5 @@
 # You must have tkinter installed to run this file.
-
+# command prompt, then Pip install tkinker 
 import tkinter as tk
 import numpy as np
 
