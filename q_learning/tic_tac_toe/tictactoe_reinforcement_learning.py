@@ -1,5 +1,9 @@
 # You must have tkinter installed to run this file.
-# command prompt, then Pip install tkinker 
+# command prompt, then:    pip install tk 
+
+# You must have gym installed to run this file.
+# command prompt, then:    Pip install gym
+
 import tkinter as tk
 import numpy as np
 
@@ -10,7 +14,7 @@ class TicTacToeAgent:
         self.q_table = np.zeros([3**9, 9])
 
         # Set the learning rate
-        self.alpha = 0.1
+        self.alpha = 0.3
 
         # Set the discount factor
         self.gamma = 0.6
