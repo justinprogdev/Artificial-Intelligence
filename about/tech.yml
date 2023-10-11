@@ -1,0 +1,50 @@
+repo_name: justinprogdev/Artificial-Intelligence
+report_id: 273dcfc3eb7c3a7d924d4696967ee4a5
+repo_type: Public
+timestamp: '2023-10-11T15:16:08+00:00'
+requested_by: uebertech2196
+provider: github
+branch: main
+detected_tools_count: 4
+tools:
+- name: Python
+  description: A clear and powerful object-oriented programming language, comparable
+    to Perl, Ruby, Scheme, or Java.
+  website_url: https://www.python.org
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  imageURL: https://img.stackshare.io/service/993/pUBY5pVj.png
+  detection_source:
+  - Repo Metadata
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  imageURL: https://img.stackshare.io/service/1046/git.png
+  detection_source:
+  - Repo Metadata
+- name: Jupyter
+  description: Multi-language interactive computing environments.
+  website_url: http://jupyter.org
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Application Utilities
+  sub_category: Data Science Notebooks
+  imageURL: https://img.stackshare.io/service/4190/fGBUdNf__400x400.jpg
+  detection_source:
+  - Repo Metadata
+- name: prolog
+  description: é uma linguagem de programação que se enquadra no paradigma de Programação
+    em Lógica Matemática.
+  website_url: http://www.swi-prolog.org/
+  open_source: false
+  hosted_saas: false
+  imageURL: https://img.stackshare.io/service/10124/no-img-open-source.png
+  detection_source:
+  - Repo Metadata
