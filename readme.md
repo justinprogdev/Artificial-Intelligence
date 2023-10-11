@@ -1,5 +1,5 @@
 # Artificial Intelligence Project Categories 
-## Each folder is one of these categories
+Each folder is one of these categories
 
 # First Order Logic  
 ## Use FOL to create reasoning in your AI
@@ -8,12 +8,11 @@ A playground to try out First Order Logic: https://swish.swi-prolog.org/example/
 First order logic is good for reasoning, but less known/popular type of AI
 
 # Mesa models
-## Mesa Models are Agent based models for simple agent scheduling and interaction. Artificial Intelligence. 
-
+Mesa Models are Agent based models for simple agent scheduling and interaction. Artificial Intelligence. 
 An easy tutorial: https://mesa.readthedocs.io/en/latest/tutorials/intro_tutorial.html
 
 # Q-Learning
-## Q- Learning is a Type of Reinforcement Learning
+Q- Learning is a Type of Reinforcement Learning
 In this category I use GYM, Python, and Tkinter to build a Tic Tac Toe game and train an agent to play against. 
 A nice github repo from openai, Gym (of course it's replaced by gymnasium now): https://github.com/openai/gym 
 # Fuzzy Logic
@@ -24,5 +23,5 @@ Hot is a fuzzy category of a crisp input. I don't go to the beach only when it's
 So a crisp output could be, The beach is busy. Google fuzzy logic/models AI.
 
 # About 
-## This contains markdown and yaml for the tech I've used in the repo. 
+This contains markdown and yaml for the tech I've used in the repo. 
 Make sure to take a look to understand the languages and tools I've used.
