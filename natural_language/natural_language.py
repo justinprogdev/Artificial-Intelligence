@@ -1,11 +1,7 @@
 import openai
 import os
 
-# You must have an environment variable named OPENAI_API_KEY in Environment Variables
-# Or (don't recommend it) Hardcode your API key in line 7
-import openai
-import os
-
+# You must have an environment variable named OPENAI_API_KEY in Environment Variables (get from Open AI)
 openai_key = os.environ.get("OPENAI_API_KEY")
 openai.api_key = openai_key
 
@@ -41,4 +37,6 @@ while is_running:
     # Print the response from OpenAI
     message = completion.choices[0].text
     print("NatLang: " + message)
+
+    # Reset our prompt to something more generic
     user_prompt = ">>>"
