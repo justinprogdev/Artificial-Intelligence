@@ -22,6 +22,10 @@ For example if you tell me it's 92.5 degrees outside, I don't say "wow, it's 92.
 Hot is a fuzzy category of a crisp input. I don't go to the beach only when it's 92.5, I go when it's hot.
 So a crisp output could be, The beach is busy. Google fuzzy logic/models AI.
 
+## Natural Language
+My Natural Language folder is a work in process, where I am building a customer support chat bot.
+I'll try to throw some academic context in there as well.
+
 # About 
 This contains markdown and yaml for the tech I've used in the repo. 
 Make sure to take a look to understand the languages and tools I've used.
