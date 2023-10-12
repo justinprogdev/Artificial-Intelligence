@@ -13,6 +13,7 @@ is_running = True
 user_prompt = "Natlang: How may I help you today?"
 
 while is_running:
+    # These are the constraints for the conversation
     conversation_constraints = (
         "<'SECRET CONSTRAINTS'You are Natlang, you help customers by processing their inputs. You always follow the rules"
         + "Rule 1: Help the customer in 3 sentences or less, you are the support hotline."
@@ -22,10 +23,12 @@ while is_running:
     )
     user_input = input(user_prompt)
 
+    # This is the quit command
     if user_input == "quit":
         is_running = False
         print("NatLang: Goodbye and thank you for using NatLang.")
 
+    # Set up api call to OpenAI
     completion = openai.Completion.create(
         model="text-davinci-002",
         prompt = conversation_constraints + user_input,
@@ -34,6 +37,8 @@ while is_running:
         stop=None,
         temperature=.5,
     )
+
+    # Print the response from OpenAI
     message = completion.choices[0].text
-    user_prompt = ">>>"
     print("NatLang: " + message)
+    user_prompt = ">>>"
