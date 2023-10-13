@@ -1,4 +1,4 @@
-# please install pre-release for openai, pip install --pre openai, as breaking changes will occur 01-04-2024
+# please install pre-release for openai, pip install --pre openai, or upgrade existing installation as breaking changes will occur 01-04-2024
 from openai import OpenAI
 import os
 
