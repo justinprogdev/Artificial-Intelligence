@@ -1,7 +1,9 @@
 # NatLang Customer Support Bot
 
 ## Overview
-NatLang is a customer support bot built using Python and the OpenAI API. It's designed to assist users based on specific rules and constraints.
+I used the idea of a NatLang bot to create a mid-life career change advisor. 
+The purpose is to focus more on guiding the chat via sentiment than it is to be technically robust. 
+However, I have added conversation state throughout the loop, so the bot doesn't have amnesia. 
 
 ## Prerequisites
 - Python 3.x
