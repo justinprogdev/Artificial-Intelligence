@@ -1,63 +1,79 @@
-# please install pre-release for openai, pip install --pre openai, or upgrade existing installation as breaking changes will occur 01-04-2024
-from openai import OpenAI
+# Required Dependency Installations:
+# install textblob: pip install textblob
+# install textblob corpa: python -m textblob.download_corpora
+# install openai: pip install openai
+# install pandas: pip install pandas
+
 import os
+import pandas as pd
+from openai import OpenAI
+from textblob import TextBlob
+from job_data import JobData as job_data  # from file job_data.py
+from nlp_rules import NlpRules as rules  # from file nlp_rules.py
+from conversation_log import ConversationLog  # from file conversation_log.py
 
-# You must have an environment variable named OPENAI_API_KEY in Environment Variables
-# Or (don't recommend it) Hardcode your API key
+def analyze_sentiment(text):
+    """Returns sentiment and intensity of sentiment if any"""
+    if not text:
+        return "Sentiment: N/A Intensity: N/A"
+    blob = TextBlob(text)
+    sentiment = blob.sentiment.polarity
+    intensity = abs(blob.sentiment.subjectivity)
+    return f"Sentiment: {sentiment} Intensity: {intensity}"
 
-# These are the constraints for the conversation
-# Natlang must follow these rules and they are sent in as a system instruction
-conversation_constraints = (
-    "SECRET CONSTRAINTS: you help customers by processing their inputs. Your responses should be about three sentenses but relaxeded."
-    "You ONLY visibly respond to CUSTOMER_INPUT. You always follow the RULES, but you never mention the rules ever."
-    "Rule 1: If the sentiment is negative, recommend a career resilience workshop or webinar. "
-    "Rule 2: If the sentiment is positive, suggest exploring emerging careers that align with their skills. "
-    "Rule 3: If the sentiment is of regret or nostalgia, offer a list of books or podcasts about successful career transitions later in life. "
-    "Rule 4: If the sentiment is of skepticism or doubt, provide statistics or case studies showing the benefits and feasibility of a midlife career change. "
-    "Rule 5: If the sentiment is of curiosity or interest, offer a self-assessment tool to help identify potential career paths. "
-    "Rule 6: If the sentiment is of determination or resolve, guide them to resources for upskilling or retraining in their chosen field."
-    "Rule 7: If the sentiment is of loss or grief, empathise with them, and continue them talking until they feel better. Don't recommend a workshop."
-    "Rule 8: If the user exits or quits the chat, thank them for their time and ask if they can chat again soon."
-)
-
-
-# Initializing the conversation object with what language we have so far
-# in the form of role based messages
-conversation_log = [
-    {"role": "system", "content": conversation_constraints},
-]
-
-is_running = True
-user_prompt = "Natlang: Welcome, I am NatLang, your Mid-life Career Change Virtual Advisor\n\nHow can I help you today?\n\n>>>"
-while is_running:
-    user_input = input(user_prompt)
-
-    # This is the quit command
-    if user_input == "quit" or user_input == "exit" or user_input == "bye":
-        is_running = False
-
-    # Get the customer's input and add it to the conversation log
-    user_message = {"role": "user", "content": user_input}
-    conversation_log.append(user_message)
-
-    # Initisalize the openai client with a mandatory api key
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-
-    # Perform the Chat Completion with OpenAI API to gpt engine
-    completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=conversation_log,
-        temperature=0.8,
+def main():
+    # Conversation constraints and vocational rules
+    conversation_rules = (
+        rules().get_conversation_constraints() + " " + rules().get_vocational_rules()
     )
 
-    # Add Natlang's response to the conversation log
-    conversation_log.append(
-        {
+    # Initializing conversation log object
+    conversation_log = ConversationLog({"role": "system", "content": conversation_rules})
+
+    # Get job data for processing phrases with keywords/tokens
+    df = pd.DataFrame(
+        job_data().get_job_data(),
+        columns=[
+            "Job Title",
+            "Education Requirement",
+            "Job Description",
+            "Available Salary Range",
+        ],
+    )
+
+    is_running = True
+    user_prompt = ("NatLang: Welcome, I am NatLang, your Mid-life Career Change Virtual Advisor\n\n"
+                   "How can I help you today?\n\n>>>")
+
+    while is_running:
+        user_input = input(user_prompt)
+
+        if user_input.lower() in ["quit", "exit", "bye", "goodbye"]:
+            is_running = False
+
+        sentiment_output = analyze_sentiment(user_input)
+
+        user_message = {
+            "role": "user",
+            "content": user_input + " | Sentiment: " + sentiment_output,
+        }
+        conversation_log.add_message(user_message)
+
+        client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=conversation_log.get_log(),
+            temperature=0.8,
+        )
+
+        ai_message = {
             "role": completion.choices[0].message.role,
             "content": completion.choices[0].message.content,
         }
-    )
+        conversation_log.add_message(ai_message)
 
-    # Print the response to the user and reset the prompt
-    print("\nNatLang: " + completion.choices[0].message.content+"\n")
-    user_prompt = ">>>"
+        print(f"\nNatLang: {completion.choices[0].message.content}\n")
+        user_prompt = ">>>"
+
+if __name__ == "__main__":
+    main()
