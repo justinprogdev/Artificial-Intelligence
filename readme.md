@@ -23,7 +23,7 @@ Hot is a fuzzy category of a crisp input. I don't go to the beach only when it's
 So a crisp output could be, The beach is busy. Google fuzzy logic/models AI.
 
 ## Natural Language
-My Natural Language folder is a work in process, where I am building a customer support chat bot.
+My Natural Language folder is a work in process, where I am building a career counselor chat bot.
 I'll try to throw some academic context in there as well.
 
 # About 
