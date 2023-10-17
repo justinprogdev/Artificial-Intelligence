@@ -24,14 +24,17 @@ def analyze_sentiment(text):
 
 def main():
     # Conversation constraints and vocational rules
+    # These rules are used to train the AI to respond to user input
+    # and are the most important part of the AI's behavior.
+    # please see nlp_rules.py for the complete sets of rules. 
     conversation_rules = (
         rules().get_conversation_constraints() + " " + rules().get_vocational_rules()
     )
 
-    # Initializing conversation log object
+    # Conversation log object to maintain conversation history
     conversation_log = ConversationLog({"role": "system", "content": conversation_rules})
 
-    # Get job data for processing phrases with keywords/tokens
+    # Get job dataframe for processing phrases with keywords/tokens
     df = pd.DataFrame(
         job_data().get_job_data(),
         columns=[
@@ -46,33 +49,40 @@ def main():
     user_prompt = ("NatLang: Welcome, I am NatLang, your Mid-life Career Change Virtual Advisor\n\n"
                    "How can I help you today?\n\n>>>")
 
+    # Main conversation loop. 
     while is_running:
         user_input = input(user_prompt)
 
-        if user_input.lower() in ["quit", "exit", "bye", "goodbye"]:
+        if user_input.lower() in ["exit", "bye", "goodbye"]:
             is_running = False
-
+        
+        # analyze sentiment of user input, so we can pass more info to the AI
         sentiment_output = analyze_sentiment(user_input)
 
         user_message = {
             "role": "user",
             "content": user_input + " | Sentiment: " + sentiment_output,
         }
+
+        # add user input to conversation log, so it's not forgotten later
         conversation_log.add_message(user_message)
 
+        # pass conversation log to OpenAI Completions API
         client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=conversation_log.get_log(),
             temperature=0.8,
         )
-
+        
+        # add AI response to conversation log so it's not forgotten later
         ai_message = {
             "role": completion.choices[0].message.role,
             "content": completion.choices[0].message.content,
         }
         conversation_log.add_message(ai_message)
 
+        # output our bot's response
         print(f"\nNatLang: {completion.choices[0].message.content}\n")
         user_prompt = ">>>"
 
