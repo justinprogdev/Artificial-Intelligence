@@ -1,3 +1,4 @@
+# Justin McClain Module 6 Natural Language Processing CS-664 Artificial Intelligence
 # Required Dependency Installations:
 # install textblob: pip install textblob
 # install textblob corpa: python -m textblob.download_corpora
