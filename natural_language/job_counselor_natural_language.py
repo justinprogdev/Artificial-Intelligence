@@ -35,6 +35,7 @@ def main():
     conversation_log = ConversationLog({"role": "system", "content": conversation_rules})
 
     # Get job dataframe for processing phrases with keywords/tokens
+    # these keywords/tokens are for use with the vocational rules in nlp_rules.py
     df = pd.DataFrame(
         job_data().get_job_data(),
         columns=[
