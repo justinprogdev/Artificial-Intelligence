@@ -18,25 +18,26 @@ If you don't have Python installed, download and install it from [python.org](ht
 
 ### Step 2: Install Required Python Packages
 Open your terminal and run the following commands to install the necessary Python packages:
-'''bash
-pip install openai textblob pandas  
+'''
+pip install openai textblob pandas 
+pip install --pre openai 
 '''
 
 ### Step 3: Download TextBlob Corpora
 You'll need to download the corpora (data files) used by TextBlob. Run the following command:
-'''bash
+'''
 python -m textblob.download_corpora
 '''
 
 ### Step 4: Set Up OpenAI API Key
 You'll need an OpenAI API key to interact with the GPT-3 API. After obtaining the key from OpenAI, set it as an environment variable in your terminal:
-'''bash 
+'''
 export OPENAI_API_KEY="your-api-key-here"
 '''
 
 ### Step 5: Run the Program
 Navigate to the directory containing your program files, and run the main script:
-'''bash
+'''
 python your_script_name.py
 '''
 

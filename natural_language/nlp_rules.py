@@ -20,7 +20,7 @@ class NlpRules:
         )
 
     def get_vocational_rules(self):
-        """Returns NLP rules based on job data"""
+        """Returns NLP rules based on job/vocational data"""
         return (
             "SECRET JOB_DATABASE: A confidential internal dataset used for enhancing dialogue flow and assisting the user. The database contains a brief list of jobs which may not align with user interests or needs."
             "Vocational Rule 1: If a job title is mentioned, recommend a corresponding job from JOB_DATABASE, sharing relevant information."
