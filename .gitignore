@@ -9,6 +9,7 @@ q_learning/tic_tac_toe/__pycache__/tic_tac_toe_gui.cpython-311.pyc
 q_learning/tic_tac_toe/__pycache__/tic_tac_toe_q_learning.cpython-311.pyc
 _pycache_/
 */__pycache__/
+cache.db
 # ignore .DS_Store files
 .DS_Store
 # ignore .ipynb_checkpoints directories
