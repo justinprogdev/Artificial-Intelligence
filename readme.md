@@ -1,16 +1,16 @@
 # Artificial Intelligence Project Categories 
 Each folder is one of these categories
 
-## Machine Learning  
+## Machine Learning 🦾 
 Machine learning projects based on my course work, and obsessive tinkering.
 <a href="https://github.com/justinprogdev/Artificial-Intelligence/tree/main/machine_learning">ML projects<a/>  
 
-## First Order Logic  
+## First Order Logic 🧠
 Use FOL to create reasoning in your AI
 A playground to try out First Order Logic: https://swish.swi-prolog.org/example/houses_puzzle.pl
 First order logic is good for reasoning, but less known/popular type of AI
 
-## Mesa models
+## Mesa models 🤖
 Mesa Models are Agent based models for simple agent scheduling and interaction. Artificial Intelligence. 
 An easy tutorial: https://mesa.readthedocs.io/en/latest/tutorials/intro_tutorial.html
 
