@@ -2,6 +2,7 @@
 Simple tutorial/course-work based ML projects demonstrating basic algorithms and methodologies in python. 
 
 ## Decision trees
+### <a href="https://github.com/justinprogdev/Artificial-Intelligence/blob/main/machine_learning/decision_tree.ipynb">DecisionTreeClassifier<a/>
 Added a notebook to demonstrate the use of scikit-learn TreeClassifier on the iris data set. 
 The tree classifier then builds a decision tree to predict the class of iris based on petal dimensions. 
 Subsequently, it predicts the probability of iris class and outputs the dimensions.  
