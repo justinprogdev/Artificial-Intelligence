@@ -31,4 +31,4 @@ I'll try to throw some academic context in there as well.
 
 # About 
 This contains markdown and yaml for the tech I've used in the repo. 
-Make sure to take a look to understand the languages and tools I've used.
+Make sure to take a look to understand the languages and tools I've used..
