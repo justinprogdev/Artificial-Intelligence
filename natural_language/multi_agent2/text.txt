@@ -1,0 +1,14 @@
+Vector Operations: Given vectors a = [2, 3] and b = [-1, 4], calculate the vector sum (a + b) and the result of the operation 3a - 2b.
+
+Matrix Multiplication: Multiply the following matrices:
+A = [[1, 2], [3, 4]] and B = [[5, 6], [7, 8]].
+
+Determinant and Inverse of a Matrix: Find the determinant of matrix C and, if possible, calculate its inverse.
+C = [[4, 3], [6, 5]].
+
+System of Linear Equations: Solve the following system of linear equations:
+2x + 3y = 16,
+5x - 2y = 1.
+
+Eigenvalues and Eigenvectors: Find the eigenvalues and the corresponding eigenvectors for matrix D:
+D = [[2, 1], [1, 2]].
